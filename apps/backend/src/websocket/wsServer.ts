@@ -1,31 +1,22 @@
-import { WebSocketServer, WebSocket } from 'ws';
 import type { WSMessage } from '@vedaai/shared-types';
 
-let wss: WebSocketServer;
-const clients = new Set<WebSocket>();
-
-export function initWSServer(port: number): void {
-  wss = new WebSocketServer({ port });
-
-  wss.on('connection', (ws) => {
-    clients.add(ws);
-    ws.on('close', () => clients.delete(ws));
-    ws.on('error', () => clients.delete(ws));
-
-    // Send initial connection confirmation
-    ws.send(JSON.stringify({ type: 'CONNECTED' }));
-  });
-
-  console.log(`✅ WebSocket server running on port ${port}`);
+/**
+ * Broadcast job updates to all connected WebSocket clients
+ * This function is set globally by the main server in index.ts
+ */
+export function broadcastJobUpdate(payload: WSMessage['payload']): void {
+  // Use the global broadcast function set in index.ts
+  if (typeof global.broadcastJobUpdate === 'function') {
+    global.broadcastJobUpdate(payload);
+  } else {
+    console.warn('⚠️ broadcastJobUpdate not initialized. WebSocket server may not be running.');
+  }
 }
 
-export function broadcastJobUpdate(payload: WSMessage['payload']): void {
-  const message: WSMessage = { type: 'JOB_UPDATE', payload };
-  const data = JSON.stringify(message);
-
-  clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
-    }
-  });
+/**
+ * Legacy function for backward compatibility
+ * WebSocket server is now integrated into main HTTP server in index.ts
+ */
+export function initWSServer(port: number): void {
+  console.warn('⚠️ initWSServer is deprecated. WebSocket is now on the same port as HTTP server.');
 }
