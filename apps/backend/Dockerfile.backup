@@ -1,0 +1,2 @@
+# This Dockerfile was moved to project root for Railway deployment
+# See /Dockerfile for the production-ready configuration

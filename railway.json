@@ -6,13 +6,12 @@
     "context": "."
   },
   "deploy": {
-    "numReplicas": 1,
-    "startCommand": "node dist/index.js",
+    "startCommand": "npm --prefix apps/backend start",
     "restartPolicy": "always",
     "healthchecks": {
       "enabled": true,
-      "interval": 10,
-      "timeout": 5
+      "interval": 30,
+      "timeout": 10
     }
   }
 }
