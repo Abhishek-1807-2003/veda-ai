@@ -1,0 +1,38 @@
+{
+  "name": "@vedaai/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "worker": "tsx watch src/queues/workers/generationWorker.ts"
+  },
+  "dependencies": {
+    "@vedaai/shared-types": "file:../../packages/shared-types",
+    "bullmq": "^5.12.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "ioredis": "^5.4.1",
+    "mongoose": "^8.5.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.52.0",
+    "pdf-parse": "^1.1.1",
+    "puppeteer": "^23.0.0",
+    "uuid": "^10.0.0",
+    "ws": "^8.17.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.11",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.10",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  }
+}
