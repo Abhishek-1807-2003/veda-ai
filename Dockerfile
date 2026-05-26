@@ -49,13 +49,13 @@ COPY packages ./packages
 # Copy backend application
 COPY apps/backend ./apps/backend
 
-# Install ALL dependencies (dev dependencies needed during install for workspace resolution)
-RUN pnpm install --frozen-lockfile || pnpm install
+# Install production dependencies only (works with pnpm workspaces)
+RUN pnpm install --prod --frozen-lockfile || pnpm install --prod
 
-# Remove dev dependencies after installation and building
-RUN pnpm prune --prod
+# Copy pre-built shared-types dist from builder stage
+COPY --from=builder /app/packages/shared-types/dist ./packages/shared-types/dist
 
-# Copy built files from builder stage
+# Copy built backend files from builder stage
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
 # Set working directory to backend for startup
