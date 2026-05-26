@@ -22,6 +22,9 @@ COPY apps/backend ./apps/backend
 # Install all dependencies (including workspace packages)
 RUN pnpm install --frozen-lockfile || pnpm install
 
+# Build shared-types package first (dependency of backend)
+RUN pnpm --filter @vedaai/shared-types build
+
 # Build the backend
 RUN pnpm --filter @vedaai/backend build
 
@@ -48,6 +51,9 @@ COPY apps/backend ./apps/backend
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile || pnpm install --prod
+
+# Build shared-types package for production
+RUN pnpm --filter @vedaai/shared-types build
 
 # Copy built files from builder stage
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
