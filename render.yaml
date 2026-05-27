@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: backend
+    runtime: docker
+    plan: standard
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    port: 4000
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: MONGO_URI
+        scope: project
+      - key: REDIS_URL
+        scope: project
+      - key: JWT_SECRET
+        scope: project
+      - key: AI_PROVIDER
+        value: openai
+      - key: AI_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        scope: project
+      - key: FRONTEND_URL
+        scope: project
