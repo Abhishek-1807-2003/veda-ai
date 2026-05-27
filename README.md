@@ -1,7 +1,6 @@
+# Veda AI
 
-# Pixel-Perfect Screen Replication
-
-A full-stack web application for managing and analyzing academic papers with AI-powered features and real-time collaboration.
+An intelligent academic platform that combines AI-powered paper analysis, real-time collaboration, and smart assignment management — built for educators and students who demand more from their tools.
 
 **Design Reference:** [Figma Design](https://www.figma.com/design/IenSXzL3jq4lZExAATvh67/Pixel-Perfect-Screen-Replication)
 
@@ -25,7 +24,7 @@ A full-stack web application for managing and analyzing academic papers with AI-
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16+ 
+- Node.js 16+
 - pnpm (or npm)
 - Docker (optional, for Redis/Database)
 
@@ -47,14 +46,14 @@ pnpm run dev
 
 ## 📖 Project Overview
 
-Pixel-Perfect Screen Replication is a comprehensive assignment management system designed for educators and students. It provides:
+Veda AI is a comprehensive academic management platform designed for educators and students. Powered by AI and built for scale, it provides:
 
-- Paper analysis and question extraction
+- Intelligent paper analysis and question extraction
 - Real-time collaboration via WebSocket
-- AI-powered paper parsing and analysis
-- Caching for improved performance
+- AI-powered parsing, categorization, and answer suggestions
+- Redis caching for high-performance delivery
 - RESTful API backend
-- Responsive mobile-first UI
+- Responsive, mobile-first UI
 
 ---
 
@@ -102,22 +101,22 @@ Pixel-Perfect Screen Replication is a comprehensive assignment management system
 ## 🛠 Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **shadcn/ui** - Component library
-- **Zustand** - State management
-- **WebSocket** - Real-time communication
+- **React 18** — UI library
+- **TypeScript** — Type safety
+- **Vite** — Build tool
+- **Tailwind CSS** — Styling
+- **shadcn/ui** — Component library
+- **Zustand** — State management
+- **WebSocket** — Real-time communication
 
 ### Backend
-- **Node.js** - Runtime
-- **Express.js** - Web framework
-- **TypeScript** - Type safety
-- **PostgreSQL** - Database
-- **Redis** - Caching & sessions
-- **Bull** - Job queue
-- **WebSocket** - Real-time updates
+- **Node.js** — Runtime
+- **Express.js** — Web framework
+- **TypeScript** — Type safety
+- **PostgreSQL** — Database
+- **Redis** — Caching & sessions
+- **Bull** — Job queue
+- **WebSocket** — Real-time updates
 
 ---
 
@@ -145,7 +144,7 @@ Create `.env` files for the backend:
 
 ```bash
 # apps/backend/.env
-DATABASE_URL=postgresql://user:password@localhost:5432/pixel_perfect
+DATABASE_URL=postgresql://user:password@localhost:5432/veda_ai
 REDIS_URL=redis://localhost:6379
 NODE_ENV=development
 PORT=3000
@@ -271,5 +270,3 @@ Contributions are welcome! Please follow the guidelines in [Guidelines.md](guide
 
 ---
 
-**Last Updated:** May 2026
-  
