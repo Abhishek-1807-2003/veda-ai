@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Production-ready Node.js backend Dockerfile
 # Optimized for Railway deployment
 
@@ -61,3 +62,11 @@ ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
 CMD ["node", "dist/index.js"]
+=======
+# This Dockerfile has been moved to the project root
+# The production Docker image is built from /Dockerfile
+# See the root Dockerfile for the complete build configuration
+#
+# To build: docker build -f Dockerfile .
+# This ensures proper monorepo workspace resolution with pnpm
+>>>>>>> 935cf35adf21e358024ab4624fbfc5bc1302de00

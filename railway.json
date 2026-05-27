@@ -6,7 +6,7 @@
     "context": "."
   },
   "deploy": {
-    "startCommand": "npm --prefix apps/backend start",
+    "startCommand": "npm start",
     "restartPolicy": "always",
     "healthchecks": {
       "enabled": true,

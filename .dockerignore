@@ -6,7 +6,6 @@ npm-debug.log
 .env
 .env.local
 .env.*.local
-dist
 build
 coverage
 .next
@@ -16,3 +15,11 @@ coverage
 .npm
 .eslintcache
 .nyc_output
+.turbo
+dist/apps/web
+dist/packages
+docs
+.github
+.gitattributes
+README.md
+LICENSE

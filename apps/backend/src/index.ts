@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
 import { redisClient, isRedisConnected } from './config/redis.js';
@@ -11,7 +11,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 // Import worker to start processing jobs
 import './queues/workers/generationWorker.js';
 
-let wsClients = new Set();
+let wsClients: Set<WebSocket> = new Set();
 
 async function main() {
   try {
