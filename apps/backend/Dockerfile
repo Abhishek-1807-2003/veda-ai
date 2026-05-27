@@ -1,53 +1,41 @@
-# Build stage
-FROM node:20-alpine AS builder
+# Production-ready Node.js backend Dockerfile
+# Optimized for Railway deployment
 
-# Install pnpm
-RUN npm install -g pnpm
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy workspace files
-COPY pnpm-workspace.yaml .npmrc* ./
-COPY package.json ./
+# Copy root workspace package files
+COPY package*.json ./
 
-# Copy lock file if it exists
-COPY pnpm-lock.yaml* ./
+# Copy pnpm workspace config if exists
+COPY pnpm-lock.yaml* .npmrc* ./
 
-# Copy packages
+# Copy shared packages (required for workspace resolution)
 COPY packages ./packages
 
-# Copy backend app
+# Copy backend source code
 COPY apps/backend ./apps/backend
 
-# Install dependencies with or without lock file
-RUN if [ -f pnpm-lock.yaml ]; then \
-      pnpm install --frozen-lockfile; \
-    else \
-      pnpm install; \
-    fi
+# Install dependencies
+RUN npm install --omit=dev
 
-# Build backend
-RUN pnpm --filter @vedaai/backend build
+# Build backend TypeScript code
+RUN npm --prefix apps/backend run build
 
-# Runtime stage
-FROM node:20-alpine
+# Set working directory to backend for runtime
+WORKDIR /app/apps/backend
 
-# Install pnpm and dumb-init for proper signal handling
-RUN npm install -g pnpm && \
-    apk add --no-cache dumb-init
+# Expose port
+EXPOSE 4000
 
-WORKDIR /app
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})" || exit 1
 
-# Copy workspace files
-COPY pnpm-workspace.yaml .npmrc* ./
-COPY package.json ./
-
-# Copy lock file if it exists
-COPY pnpm-lock.yaml* ./
-
-# Copy packages
-COPY packages ./packages
+# Start the backend server
+CMD ["npm", "start"]
 
 # Copy backend app source (for production dependencies)
 COPY apps/backend ./apps/backend

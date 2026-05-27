@@ -4,6 +4,7 @@ import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
+import { redisClient, isRedisConnected } from './config/redis.js';
 import routes from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -17,7 +18,17 @@ async function main() {
     // Connect to MongoDB
     console.log('📦 Connecting to MongoDB...');
     await connectDB();
-    console.log('✅ Connected to MongoDB');
+    console.log('✅ MongoDB connected');
+
+    // Check Redis connection status
+    console.log('📦 Checking Redis connection...');
+    if (isRedisConnected()) {
+      console.log('✅ Redis connected');
+    } else if (redisClient.status === 'end') {
+      console.warn('⚠️ Redis unavailable - falling back to In-Memory mode');
+    } else {
+      console.log('🔄 Redis connecting... (background retry)');
+    }
 
     // Create Express app
     const app = express();
@@ -38,7 +49,11 @@ async function main() {
 
     // Health check endpoint
     app.get('/health', (req, res) => {
-      res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+      res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        redis: isRedisConnected() ? 'connected' : 'disconnected',
+      });
     });
 
     // Routes
