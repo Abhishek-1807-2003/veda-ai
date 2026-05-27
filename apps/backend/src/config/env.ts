@@ -66,20 +66,3 @@ export const env = parsed.data || {
   AI_MODEL: 'gpt-4o-mini',
   WS_PORT: 4000,
 };
-    process.exit(1);
-  }
-  // In development, warn but continue with defaults
-  console.warn('⚠️  Using default values for missing environment variables');
-}
-
-export const env = parsed.data || {
-  PORT: 4000,
-  NODE_ENV: 'development',
-  MONGO_URI: 'mongodb://localhost:27017/vedaai',
-  REDIS_HOST: 'localhost',
-  REDIS_PORT: 6379,
-  JWT_SECRET: 'dev-secret-replace-me',
-  AI_PROVIDER: 'openai',
-  AI_MODEL: 'gpt-4o-mini',
-  WS_PORT: 4000,
-};

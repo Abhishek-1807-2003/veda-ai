@@ -1,29 +1,57 @@
-<<<<<<< HEAD
 # Production-ready Node.js backend Dockerfile
-# Optimized for Railway deployment
+# Optimized for Railway deployment with pnpm workspace
 
-FROM node:20-alpine
+FROM node:20-alpine AS builder
+
+# Install pnpm
+RUN npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
 
 # Copy root workspace package files
-COPY package*.json ./
+COPY pnpm-workspace.yaml .npmrc* package.json ./
 
-# Copy pnpm workspace config if exists
-COPY pnpm-lock.yaml* .npmrc* ./
+# Copy lock file
+COPY pnpm-lock.yaml ./
 
-# Copy shared packages (required for workspace resolution)
+# Install dependencies
+RUN pnpm install --frozen-lockfile || pnpm install
+
+# Copy shared packages
 COPY packages ./packages
 
 # Copy backend source code
 COPY apps/backend ./apps/backend
 
-# Install dependencies
-RUN npm install --omit=dev
+# Build shared types first
+RUN pnpm --filter @vedaai/shared-types build
 
-# Build backend TypeScript code
-RUN npm --prefix apps/backend run build
+# Build backend
+RUN pnpm --filter @vedaai/backend build
+
+# Production stage
+FROM node:20-alpine
+
+# Install pnpm in production image
+RUN npm install -g pnpm
+
+# Set working directory
+WORKDIR /app
+
+# Copy root workspace config
+COPY pnpm-workspace.yaml .npmrc* package.json ./
+
+# Copy pnpm lock
+COPY pnpm-lock.yaml ./
+
+# Install production dependencies only
+RUN pnpm install --prod --frozen-lockfile || pnpm install --prod
+
+# Copy built files from builder
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+COPY --from=builder /app/apps/backend/package.json ./apps/backend/
 
 # Set working directory to backend for runtime
 WORKDIR /app/apps/backend
@@ -36,37 +64,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:4000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})" || exit 1
 
 # Start the backend server
-CMD ["npm", "start"]
-
-# Copy backend app source (for production dependencies)
-COPY apps/backend ./apps/backend
-
-# Install production dependencies only
-RUN if [ -f pnpm-lock.yaml ]; then \
-      pnpm install --prod --frozen-lockfile; \
-    else \
-      pnpm install --prod; \
-    fi
-
-# Copy built files from builder
-COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
-
-# Set working directory to backend
-WORKDIR /app/apps/backend
-
-# Expose ports
-EXPOSE 4000 4001
-
-# Use dumb-init to handle signals properly
-ENTRYPOINT ["dumb-init", "--"]
-
-# Start the application
 CMD ["node", "dist/index.js"]
-=======
-# This Dockerfile has been moved to the project root
-# The production Docker image is built from /Dockerfile
-# See the root Dockerfile for the complete build configuration
-#
-# To build: docker build -f Dockerfile .
-# This ensures proper monorepo workspace resolution with pnpm
->>>>>>> 935cf35adf21e358024ab4624fbfc5bc1302de00
