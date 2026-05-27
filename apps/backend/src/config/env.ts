@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Load .env file only if it exists (won't fail in production where env vars are set via Railway)
+// Load .env file only if it exists (won't fail in production where env vars are set via Render/environment)
 if (process.env.NODE_ENV !== 'production') {
   config({ path: resolve(__dirname, '../../.env') });
 }
